@@ -46,7 +46,7 @@ function action {
       docker
       ;;
     "from")
-      from $2 $3
+      from $2 $3 $4 $5
       ;;
     "template")
       template $2
@@ -165,7 +165,7 @@ function init_env {
     echo "Ya existe un proxy wpt en otra red virtual"
     exit
   fi
-  if [[ $NET == "" ]]; then
+  if [[ $NET == "" || $PROXY == "" ]]; then
     timeout 2  bash -c "</dev/tcp/localhost/$WEB_PORT" 2> /dev/null
     if [[ $? == 0 ]]; then
       echo "El puerto $WEB_PORT ya se encuentra en uso"
@@ -254,7 +254,9 @@ function from {
     if [[ $GIT_TEMPLATE_ID && $GIT_SERVER && $GIT_TOKEN && $GIT_TEMPLATE_DIR ]]; then
       git clone ${GIT_SERVER}${GIT_TEMPLATE_DIR}/$1.git $2
       cd $2
-      cat .env.example | sed "s/example/$2/g" > .env
+      cat .env.example | sed "s/example/$2/g" \
+        | sed "s/TITLE/${AUXTITLE:-$2}/g" \
+        | sed "s/DESCRIPTION/${AUXDESC:-"Project WPT"}/g" > .env
       sudo sh -c "echo -e \"127.0.0.1\t$2.local\" >> /etc/hosts"
       sudo sh -c "echo -e \"127.0.0.1\tmyadmin.$2.local\" >> /etc/hosts"
       . <(cat .env | sed "s/=/=\"/g" | perl -p -e 's/\n/"\n/') 2> /dev/null
@@ -276,6 +278,8 @@ function template {
     fi
 }
 
+AUXTITLE=$4
+AUXDESC=$5
 
 #main
 if [ -f .env ]; then
