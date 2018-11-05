@@ -255,8 +255,8 @@ function from {
       git clone ${GIT_SERVER}${GIT_TEMPLATE_DIR}/$1.git $2
       cd $2
       cat .env.example | sed "s/example/$2/g" \
-        | sed "s/TITLE/${AUXTITLE:-$2}/g" \
-        | sed "s/DESCRIPTION/${AUXDESC:-"Project WPT"}/g" > .env
+        | sed "s/=TITLE/=${AUXTITLE:-$2}/g" \
+        | sed "s/=DESCRIPTION/=${AUXDESC:-"Project WPT"}/g" > .env
       sudo sh -c "echo -e \"127.0.0.1\t$2.local\" >> /etc/hosts"
       sudo sh -c "echo -e \"127.0.0.1\tmyadmin.$2.local\" >> /etc/hosts"
       . <(cat .env | sed "s/=/=\"/g" | perl -p -e 's/\n/"\n/') 2> /dev/null
