@@ -161,7 +161,11 @@ function init_env {
   CORE="-f deploy/docker-compose.yml -f deploy/docker-compose.$ENV.yml"
   NET=$($SUDO docker network ls | grep $NETWORK)
   PROXY=$($SUDO docker ps | grep wpt_proxy)
-  if [[ $NET == ""  && $1 == "" ]]; then
+  if [[ $PROXY != "" && $NET == "" ]]; then
+    echo "Ya existe un proxy wpt en otra red virtual"
+    exit
+  fi
+  if [[ $NET == "" ]]; then
     timeout 2  bash -c "</dev/tcp/localhost/$WEB_PORT" 2> /dev/null
     if [[ $? == 0 ]]; then
       echo "El puerto $WEB_PORT ya se encuentra en uso"
