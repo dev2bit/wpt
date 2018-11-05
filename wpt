@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ACTION=""
+WPT_URL="http://src.dev2bit.com:10080/template/wpt.git"
 
 function action {
   case $1 in
@@ -46,6 +47,9 @@ function action {
       ;;
     "from")
       from $2 $3
+      ;;
+    "template")
+      template $2
       ;;
     *)
       if [[ $DEFAULT_ACTION != "" ]]; then
@@ -107,9 +111,21 @@ function init {
     echo "Error: Debe indicar una ruta de repositorio git válida"
     help
   fi
+  STR="http"
+  URL=$1
+  if [[ $URL != ${STR}* ]]; then
+    get_git_config
+    if [[ $GIT_SERVER && $GIT_TEMPLATE_DIR && $GIT_TEMPLATE_ID ]]; then
+      create_repo $URL $GIT_TEMPLATE_ID
+      URL=${GIT_SERVER}${GIT_TEMPLATE_DIR}/$URL.git
+    else
+      echo "Error: Url incorrecta"
+      exit
+    fi
+  fi
   rm -rf .git
   git init
-  git remote add origin $1
+  git remote add origin $URL
   git add --all
   git commit -am "First commit"
   git remote -v
@@ -206,12 +222,12 @@ function del {
 function get_git_config {
   GIT_SERVER=$(git config --global --get wpt.server)
   GIT_TOKEN=$(git config --global --get wpt.token)
-  GIT_ID=$(git config --global --get wpt.templateid)
+  GIT_TEMPLATE_ID=$(git config --global --get wpt.templateid)
   GIT_TEMPLATE_DIR=$(git config --global --get wpt.templatedir)
   GIT_PID=$(git config --global --get wpt.projectid)
   GIT_PDIR=$(git config --global --get wpt.projectdir)
   if [[ $GIT_PID == "" ]]; then
-    $GIT_PID=GIT_ID
+    $GIT_PID=GIT_TEMPLATE_ID
   fi
   if [[ $GIT_PDIR == "" ]]; then
     $GIT_PDIR=GIT_TEMPLATE_DIR
@@ -220,18 +236,31 @@ function get_git_config {
 
 function create_repo {
   E=$( git ls-remote ${GIT_SERVER}$1.git 2> /dev/null && echo 1 || echo 0 )
+  N_ID=$GIT_PID
+  if [[ $2 != "" ]]; then
+    N_ID=$2
+  fi
   if [[ $E == "0" ]]; then
-    curl -H "Content-Type:application/json" "${GIT_SERVER}api/v3/projects?private_token=${GIT_TOKEN}" -d "{ \"name\": \"$1\", \"namespace_id\":\"$GIT_PID\" }"
+    curl -H "Content-Type:application/json" "${GIT_SERVER}api/v3/projects?private_token=${GIT_TOKEN}" -d "{ \"name\": \"$1\", \"namespace_id\":\"$N_ID\" }"
   fi
 }
 
 function from {
     get_git_config
-    if [[ $GIT_ID && $GIT_SERVER && $GIT_TOKEN && $GIT_TEMPLATE_DIR ]]; then
+    if [[ $GIT_TEMPLATE_ID && $GIT_SERVER && $GIT_TOKEN && $GIT_TEMPLATE_DIR ]]; then
       git clone ${GIT_SERVER}${GIT_TEMPLATE_DIR}/$1.git $2
       cd $2
-      create_repo $2
+      # create_repo $2
       new ${GIT_SERVER}${GIT_PDIR}/$2.git
+    fi
+}
+
+function template {
+    get_git_config
+    if [[ $GIT_TEMPLATE_ID && $GIT_SERVER && $GIT_TOKEN && $GIT_TEMPLATE_DIR ]]; then
+      git clone ${WPT_URL} $1
+      cd $1
+      init $1
     fi
 }
 
