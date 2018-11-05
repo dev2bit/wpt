@@ -81,8 +81,21 @@ function new {
     echo "Error: Debe indicar una ruta de repositorio git válida"
     help
   fi
+  STR="http"
+  URL=$1
+  if [[ $URL != ${STR}* ]]; then
+    get_git_config
+    if [[ $GIT_SERVER && $GIT_PDIR ]]; then
+      create_repo $URL
+      URL=${GIT_SERVER}${GIT_PDIR}/$URL.git
+    else
+      echo "Error: Url incorrecta"
+      exit
+    fi
+  fi
+  git remote remove upstream 2> /dev/null
   git remote rename origin upstream
-  git remote add origin $1
+  git remote add origin $URL
   git remote set-url --push upstream DISABLE
   git remote -v
   git push -fu origin master
@@ -190,28 +203,35 @@ function del {
   $SUDO docker-compose -p $APP_NAME $CORE $SERVS run dev composer remove "wpackagist-$1/$2"
 }
 
+function get_git_config {
+  GIT_SERVER=$(git config --global --get wpt.server)
+  GIT_TOKEN=$(git config --global --get wpt.token)
+  GIT_ID=$(git config --global --get wpt.templateid)
+  GIT_TEMPLATE_DIR=$(git config --global --get wpt.templatedir)
+  GIT_PID=$(git config --global --get wpt.projectid)
+  GIT_PDIR=$(git config --global --get wpt.projectdir)
+  if [[ $GIT_PID == "" ]]; then
+    $GIT_PID=GIT_ID
+  fi
+  if [[ $GIT_PDIR == "" ]]; then
+    $GIT_PDIR=GIT_TEMPLATE_DIR
+  fi
+}
+
+function create_repo {
+  E=$( git ls-remote ${GIT_SERVER}$1.git 2> /dev/null && echo 1 || echo 0 )
+  if [[ $E == "0" ]]; then
+    curl -H "Content-Type:application/json" "${GIT_SERVER}api/v3/projects?private_token=${GIT_TOKEN}" -d "{ \"name\": \"$1\", \"namespace_id\":\"$GIT_PID\" }"
+  fi
+}
+
 function from {
-    GIT_SERVER=$(git config --global --get wpt.server)
-    GIT_TOKEN=$(git config --global --get wpt.token)
-    GIT_ID=$(git config --global --get wpt.templateid)
-    GIT_TEMPLATE_DIR=$(git config --global --get wpt.templatedir)
-    GIT_PID=$(git config --global --get wpt.projectid)
-    GIT_PDIR=$(git config --global --get wpt.projectdir)
+    get_git_config
     if [[ $GIT_ID && $GIT_SERVER && $GIT_TOKEN && $GIT_TEMPLATE_DIR ]]; then
-      # echo $GIT_ID  $GIT_SERVER  $GIT_TOKEN  $GIT_TEMPLATE_DIR
       git clone ${GIT_SERVER}${GIT_TEMPLATE_DIR}/$1.git $2
       cd $2
-      if [[ $GIT_PID == "" ]]; then
-        $GIT_PID=GIT_ID
-      fi
-      if [[ $GIT_PDIR == "" ]]; then
-        $GIT_PDIR=GIT_TEMPLATE_DIR
-      fi
-      E=$( git ls-remote ${GIT_SERVER}$2.git 2>1 > /dev/null && echo 1 || echo 0 )
-      if [[ $E == "0" ]]; then
-        curl -H "Content-Type:application/json" "${GIT_SERVER}api/v3/projects?private_token=${GIT_TOKEN}" -d "{ \"name\": \"$2\", \"namespace_id\":\"$GIT_PID\" }"
-        new ${GIT_SERVER}${GIT_PDIR}/$2.git
-      fi
+      create_repo $2
+      new ${GIT_SERVER}${GIT_PDIR}/$2.git
     fi
 }
 
