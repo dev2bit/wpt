@@ -260,7 +260,7 @@ function from {
       sudo sh -c "echo -e \"127.0.0.1\t$2.local\" >> /etc/hosts"
       sudo sh -c "echo -e \"127.0.0.1\tmyadmin.$2.local\" >> /etc/hosts"
       . <(cat .env | sed "s/=/=\"/g" | perl -p -e 's/\n/"\n/') 2> /dev/null
-      new $1 $2
+      new $2
       ACTION="install"
       action "install"
       ACTION=""
