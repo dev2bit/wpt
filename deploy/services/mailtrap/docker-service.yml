@@ -1,0 +1,9 @@
+version: '2'
+services:
+  script:
+    links:
+      - mailtrap:mail_host
+  mailtrap:
+    image: eaudeweb/mailtrap
+    environment:
+    - "VIRTUAL_HOST=mailtrap.${WEB_HOST}"

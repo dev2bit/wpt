@@ -1,0 +1,15 @@
+/*
+   Theme Name: Child theme of basic
+   Theme URI: URL
+   Description: Template WP
+   Version: 100
+   Template: basic
+   Author URI: 
+   Text Domain: Child theme of basic
+*/
+
+@import url("../../default/style.css");
+@import url("../basic/style.css");
+
+
+/*Custom Style*/

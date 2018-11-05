@@ -1,0 +1,21 @@
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{ENV:REDIRECT_STATUS} 200
+RewriteRule ^ - [L]
+
+RewriteRule ^index\.php$ - [L]
+
+RewriteRule ^adm1n/(.*) wp/wp-admin/$1?%{QUERY_STRING} [L]
+
+RewriteRule ^wp/ - [NC,L]
+
+RewriteCond %{DOCUMENT_ROOT}/wp/$1 -d [OR]
+RewriteCond %{DOCUMENT_ROOT}/wp/$1 -f
+RewriteRule ^(.*)$ /wp/$1 [END]
+
+RewriteRule ^adm1n/(.*) wp/wp-admin/$1 [END]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]

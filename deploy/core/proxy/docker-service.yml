@@ -1,0 +1,17 @@
+version: '3.5'
+services:
+  proxy-web:
+    image: jwilder/nginx-proxy
+    ports:
+      - ${WEB_PORT}:80
+      - ${WEB_SSL_PORT}:443
+    environment:
+      - "HTTPS_METHOD=nohttps"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+    networks:
+      - frontend
+networks:
+  frontend:
+    name: $NETWORK

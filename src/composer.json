@@ -1,0 +1,47 @@
+{
+    "autoload": {
+      "classmap": [
+        "composer.php"
+      ]
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        },
+        {
+            "type": "composer",
+            "url": "https://wp-languages.github.io"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "johnpbloch/wordpress": "*",
+        "wpackagist-plugin/akismet": "*",
+        "koodimonni-language/es_es": "^4.9",
+        "wpackagist-theme/basic": "*"
+    },
+    "suggest": {
+        "wpackagist-plugin/woocommerce": "Woocommerce",
+        "wpackagist-plugin/woocommerce-shortcodes": "Easy shortcodes in Woocommerce",
+        "wpackagist-plugin/mailchimp": "Mailchimp",
+        "wpackagist-plugin/ml-slider": "MetaSlider",
+        "wpackagist-plugin/bxslider-wp": "BxSlider WP"
+    },
+    "extra": {
+      "wordpress-install-dir": "wp",
+      "dropin-paths": {
+        "wp-content/languages/": ["vendor:koodimonni-language"],
+        "wp-content/languages/plugins/": ["vendor:koodimonni-plugin-language"],
+        "wp-content/languages/themes/": ["vendor:koodimonni-theme-language"]
+      }
+    },
+    "scripts": {
+        "post-package-install": [
+            "composer::postPackageInstall"
+        ],
+        "post-package-uninstall": [
+            "composer::postPackageUninstall"
+        ]
+    }
+}

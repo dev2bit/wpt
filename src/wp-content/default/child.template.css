@@ -1,0 +1,15 @@
+/*
+   Theme Name: Child theme of {PARENT}
+   Theme URI: URL
+   Description: {DESCRIPTION}
+   Version: 100
+   Template: {PARENT}
+   Author URI: {AUTHOR}
+   Text Domain: Child theme of {PARENT}
+*/
+
+@import url("../../default/style.css");
+@import url("../{PARENT}/style.css");
+
+
+/*Custom Style*/

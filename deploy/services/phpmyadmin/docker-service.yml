@@ -1,0 +1,8 @@
+version: '2'
+services:
+  myadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    links:
+      - db:db
+    environment:
+    - "VIRTUAL_HOST=myadmin.${WEB_HOST}"

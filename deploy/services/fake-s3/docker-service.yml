@@ -1,0 +1,17 @@
+version: '2'
+services:
+  script:
+    links:
+      - content:${AWS_BUCKET}.${AWS_HOST}
+  dev:
+    links:
+      - content:fake-s3.content_host
+  content:
+    image: lphoward/fake-s3
+    environment:
+    - "VIRTUAL_HOST=${AWS_BUCKET}.${AWS_HOST}"
+    - "VIRTUAL_PORT=4569"
+    volumes:
+      - content_data:/fakes3_root
+volumes:
+  content_data:
