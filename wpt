@@ -161,7 +161,7 @@ function init_env {
   CORE="-f deploy/docker-compose.yml -f deploy/docker-compose.$ENV.yml"
   NET=$($SUDO docker network ls | grep $NETWORK)
   PROXY=$($SUDO docker ps | grep wpt_proxy)
-  if [[ $NET == "" || $PROXY == "" ]]; then
+  if [[ $NET == ""  && $1 == "" ]]; then
     timeout 2  bash -c "</dev/tcp/localhost/$WEB_PORT" 2> /dev/null
     if [[ $? == 0 ]]; then
       echo "El puerto $WEB_PORT ya se encuentra en uso"
@@ -189,7 +189,7 @@ function dev {
   $SUDO docker-compose -p $APP_NAME $CORE $SERVS run ${ACTION}
 }
 function composer {
-  init_env
+  init_env 0
   $SUDO docker-compose -p $APP_NAME $CORE $SERVS run dev composer ${ACTION}
 }
 function wp {
@@ -253,7 +253,12 @@ function from {
       cat .env.example | sed "s/example/$2/g" > .env
       sudo sh -c "echo -e \"127.0.0.1\t$2.local\" >> /etc/hosts"
       sudo sh -c "echo -e \"127.0.0.1\tmyadmin.$2.local\" >> /etc/hosts"
-      new $2
+      . <(cat .env | sed "s/=/=\"/g" | perl -p -e 's/\n/"\n/') 2> /dev/null
+      new $1 $2
+      ACTION="install"
+      action "install"
+      ACTION=""
+      action
     fi
 }
 
