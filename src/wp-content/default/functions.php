@@ -1,6 +1,6 @@
 <?php
 
-function kill_theme_wpse_188906($themes) {
+function wpt_kill_theme($themes) {
   $new = [];
   foreach ($themes as $key => $value) {
     if (strpos($key, "_child") !== false)
@@ -8,6 +8,13 @@ function kill_theme_wpse_188906($themes) {
   }
   return $new;
 }
-add_filter('wp_prepare_themes_for_js','kill_theme_wpse_188906');
+add_filter('wp_prepare_themes_for_js','wpt_kill_theme');
 
+
+function wpt_head () {
+  ?>
+    <meta name="abc" content="xyz" />
+  <?php
+}
+add_action( 'wp_head', 'wpt_head' );
 ?>
