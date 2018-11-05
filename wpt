@@ -250,8 +250,10 @@ function from {
     if [[ $GIT_TEMPLATE_ID && $GIT_SERVER && $GIT_TOKEN && $GIT_TEMPLATE_DIR ]]; then
       git clone ${GIT_SERVER}${GIT_TEMPLATE_DIR}/$1.git $2
       cd $2
-      # create_repo $2
-      new ${GIT_SERVER}${GIT_PDIR}/$2.git
+      cat .env.example | sed "s/example/$2/g" > .env
+      sudo sh -c "echo -e \"127.0.0.1\t$2.local\" >> /etc/hosts"
+      sudo sh -c "echo -e \"127.0.0.1\tmyadmin.$2.local\" >> /etc/hosts"
+      new $2
     fi
 }
 
@@ -260,6 +262,7 @@ function template {
     if [[ $GIT_TEMPLATE_ID && $GIT_SERVER && $GIT_TOKEN && $GIT_TEMPLATE_DIR ]]; then
       git clone ${WPT_URL} $1
       cd $1
+      cat .env.example | sed 's/example/$1/g' > .env
       init $1
     fi
 }
@@ -267,7 +270,7 @@ function template {
 
 #main
 if [ -f .env ]; then
-  . <(cat .env | sed "s/=/=\"/g" | perl -p -e 's/\n/"\n/')
+  . <(cat .env | sed "s/=/=\"/g" | perl -p -e 's/\n/"\n/') 2> /dev/null
 fi
 while getopts ":h" arg; do
   case $arg in
