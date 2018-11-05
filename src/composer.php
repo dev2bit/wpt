@@ -22,7 +22,7 @@ class composer
           update_option( 'blogdescription', getenv("DESCRIPTION") );
           update_option( 'template', "" );
           update_option( 'stylesheet', "" );
-          $options = json_decode(file_get_contents(__DIR__."/options.json"), true);
+          $options = json_decode(file_get_contents(__DIR__."/wp-options.json"), true);
           foreach ($options as $key => $value) {
               update_option($key, $value);
           }
