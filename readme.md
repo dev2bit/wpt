@@ -3,6 +3,7 @@
   <img width="200" alt="dev2bit"  src="https://raw.githubusercontent.com/fbohorquez/sql-charts-dashboard/master/resources/logo.png"/>
 </a>
 </p>
+
 # WordPress Templates: wpt
 
 wpt es un sistema para crear plantillas de proyectos WordPress.
