@@ -33,7 +33,7 @@ Con un simple comando wpt podría crear una tienda online (shop-project) desde l
 ```bash
 $ wpt from shop-template shop-project
 ```
-Tras la ejecución del comando bastará con acceder con el navegador a la URL shop-project.local. Se puede ver qeu se dispone de un sistema instalado, configurado y actualizado según lo establecido en la plantilla. 
+Tras la ejecución del comando bastará con acceder con el navegador a la URL shop-project.local. Se puede ver que se dispone de un sistema instalado, configurado y actualizado según lo establecido en la plantilla. 
 
 
 ## Tecnologías usadas
