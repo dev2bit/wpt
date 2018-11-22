@@ -48,7 +48,7 @@ Tras la ejecución del comando bastará con acceder con el navegador a la URL sh
 * docker y docker-compose
 
 ## Plantillas de proyectos WordPress
-Las plantillas creadas con wpt son repositorios git, los cuales definen un entorno de contenedores docker sobre el que se ejecutarán la aplicaciones. Además definen las dependencias de base (plugins, temas, traducciones...) que tendrán los proyectos que se creen.
+Las plantillas creadas con wpt son repositorios git, los cuales definen un entorno de contenedores docker sobre el que se ejecutarán la aplicación. Además definen las dependencias de base (plugins, temas, traducciones...) que tendrán los proyectos que se creen.
 
 A partir del repositorio wpt es posible crear otro repositorio, donde las dependencias y los servicios estén totalmente personalizados. Este nuevo repositorio es el que se corresponde con
 la plantilla y es el que a su vez se utilizará para crear otros repositorios de proyectos.
