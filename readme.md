@@ -181,7 +181,7 @@ $ wpt dc ACTION ARGS
 
 El sistema de plantillas wpt utilizará automaticamente la configuración de servicios establecida en el fichero de variables de entorno, simplificando el comando. Dentro del directorio deploy se puede encontrar la definición de los distintos servicios como ficheros docker-compose.yml, de esta forma se puede añadir cualquier servicio software adicional que fuera necesario para los proyectos creados a partir de la plantilla.
 
-Para más información sobre docker-compose, véase el [manual de referencia] (https://docs.docker.com/compose/compose-file/#compose-and-docker-compatibility-matrix) de este.
+Para más información sobre docker-compose, véase el [manual de referencia](https://docs.docker.com/compose/) de este.
 
 ### Gestión de dependencias
 
