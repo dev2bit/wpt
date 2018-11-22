@@ -24,6 +24,18 @@ Los proyectos construidos sobre plantillas wpt son:
 * Modificaciones desde la plantilla: Al aplicar cambios a una plantilla, los proyectos creados a partir de estas pueden actualizar estas modificaciones facilmente.
 * Actualizables: Tanto el código de WordPress como el de todas las dependencias (plugins, temas, traducciones...)  se podrán actualizar fácilmente
 
+## Ejemplo de uso
+
+Desde wpt es posible crear un template para tiendas shop-template. Este template por ejemplo puede contener wordpress con plugins como woocommerce, loco translate, contact-form 7, etc. También añadirá un tema. Además incluirá todas las configuraciones por defecto como por ejemplo la estructura de las URL, el usuario por defecto, etc.
+
+Con un simple comando wpt podría crear una tienda online (shop-project) desde la plantilla (shop-template). 
+
+```bash
+$ wpt from shop-template shop-project
+```
+Tras la ejecución del comando bastará con acceder con el navegador a la URL shop-project.local. Se puede ver qeu se dispone de un sistema instalado, configurado y actualizado según lo establecido en la plantilla. 
+
+
 ## Tecnologías usadas
 
 * git: Para el control de versiones
@@ -171,7 +183,7 @@ El sistema de plantillas wpt utilizará automaticamente la configuración de ser
 
 Para más información sobre docker-compose, véase el [manual de referencia] (https://docs.docker.com/compose/compose-file/#compose-and-docker-compatibility-matrix) de este.
 
-### Gestión de dependencias.
+### Gestión de dependencias
 
 Para la gestión de dependencias wpt utiliza composer. Composer permite instalar y tener actualizado todo el código de wordpress, los plugins, los temas, las traducciones, etc. Además, gracias al script src/composer.php, es posible establecer configuraciones por defecto. Es posible ejecutar cualquier acción composer.
 
