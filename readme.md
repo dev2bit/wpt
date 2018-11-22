@@ -21,7 +21,7 @@ Los proyectos construidos sobre plantillas wpt son:
 * Extensibles: Es fácil añadir más servicios y dependencias.
 * Configurables: Según el entorno en el que se ejecute y para cada instancia del mismo.
 * Modificaciones desde la plantilla: Al aplicar cambios a una plantilla, los proyectos creados a partir de estas pueden actualizar estas modificaciones facilmente.
-* Actualizables: Tanto el código de WordPress como el de todas las dependencias (plugins, temas, traducciones...)  se deben actualizar fácilmente
+* Actualizables: Tanto el código de WordPress como el de todas las dependencias (plugins, temas, traducciones...)  se podrán actualizar fácilmente
 
 ## Tecnologías usadas
 
@@ -47,8 +47,7 @@ Un proyecto wpt se compone del código de aplicación (src) y de la información
 
 ### Código de aplicación (src)
 
-Inicialmente este directorio contiene un fichero de definición para composer, el cual guarda las dependencias que tendrán todos los proyectos creados por la plantilla.
-Es posible editar este fichero para añadir sus propios plugins, temas y traducciones
+Inicialmente este directorio contiene un fichero de definición para composer, el cual guarda las dependencias que tendrán todos los proyectos creados por la plantilla. Es posible editar este fichero para añadir sus propios plugins, temas y traducciones
 
 ### Información de despliegue (deploy)
 
@@ -59,7 +58,7 @@ Un proyecto wpt se compone de una serie de servicios que se ejecutan en unos con
 
 Dentro de core se encuentran la definición de servicios básicos tales como servidor web, el servidor de script o la base de datos. Además también contiene dos servicios especiales, el servicio proxy y el dev, los cuales se detallarán más adelante.
 
-El directorio services contiene los servicios complementarios, cuyo uso dependerá del proyecto o el entorno en que se ejecute. Un servicio complementario puede ser por ejemplo phpmyadmin para la gestión cómoda de la base de datos, o mailtrap para depurar el envío de emails. Cada plantilla puede definir sus propios servicios y cada instancia de un mismo proyecto puede definir los servicios que utilizará. Un proyecto podría necesitar de un servicio que se encargue de realizar backups automáticos, pero este servicio solo será necesario en la instancia del proyecto
+El directorio services contiene los servicios complementarios, cuyo uso dependerá del proyecto o el entorno en que se ejecute. Un servicio complementario puede ser por ejemplo phpmyadmin para la gestión cómoda de la base de datos, o mailtrap para depurar el envío de emails. Cada plantilla puede definir sus propios servicios y cada instancia de un mismo proyecto puede utilizar los servicios que necesite. Así por ejemplo un proyecto podría necesitar de un servicio que se encargue de realizar backups automáticos, pero este servicio solo será necesario en la instancia del proyecto
 que se ejecuta en el entorno de producción.
 
 Cada servicio se configura mediante un fichero docker-compose, y dependiendo el caso, de un DockerFile y de los ficheros de configuración que se montarán en el contenedor.
@@ -83,11 +82,11 @@ Cada proyecto wpt consta de un fichero de configuración de varaibles que tiene 
 que se usarán en cada contenedor y en el código de la aplicación. Estas variables dependerán de los servicios utilizados, aúnque muchas de ellas son de definición obligatoria para el correcto funcionamiento del proyecto, como por ejemplo el nombre de la aplicación, el host o los datos de conexión de la base de datos. Se dispone de un fichero de ejemplo .env.example
 que vale como plantilla para definir estas variables.
 
-## Crear una plantilla de proyecto WordPress
+## Crear una plantilla wpt para proyectos WordPress
 Para crear una plantilla de proyecto WordPress lo primero es clonar el repositorio git de wpt
 
 ```bash
-$ git clone $WPT_REPO my-template
+$ git clone WPT_REPO my-template
 $ cd my-template
 ```
 La plantilla es en si misma un repositorio git, por lo que se precisa de un repositorio vacío.
@@ -95,7 +94,7 @@ La plantilla es en si misma un repositorio git, por lo que se precisa de un repo
 Al ejecutar el script wpt con la accion init y la url del repositorio donde se desea guardar la plantilla, se transfiere todo el código de wpt al nuevo repositorio como un solo commit.
 
 ```bash
-$ ./wpt init $MY_TEMPLATE_REPO
+$ wpt init MY_TEMPLATE_REPO
 ```
 
 El nuevo repositorio representa la plantilla de proyectos. Es posible editar todos los aspectos del sistema wpt para desarrollar plantillas ajustadas a las necesidades y preferencias concretas. Por ejemplo, es posible añadir dependencias de plugins con composer o añadir nuevos servicios en forma de  contenedores docker mediante docker-compose. Tras editar la plantilla y hacer push los cambios se subirán al repositorio de la plantilla.
@@ -105,7 +104,7 @@ El nuevo repositorio representa la plantilla de proyectos. Es posible editar tod
 Para crear un proyecto desde una plantilla wpt lo primero es clonar el repositorio de la plantilla wpt.
 
 ```bash
-$ git clone $MY_TEMPLATE_REPO my-project
+$ git clone MY_TEMPLATE_REPO my-project
 $ cd my-project
 ```
 
@@ -114,15 +113,14 @@ El proyecto es en si mismo un repositorio git, por lo que se precisa un reposito
 Al ejecutar el script wpt con la acción new y la url del repositorio donde se desea guardar el proyecto, se transfiere todo el código de la plantilla al repositorio del proyecto.
 
 ```bash
-$ ./wpt new $MY_PROJECT_REPO
+$ wpt new $MY_PROJECT_REPO
 ```
-En este caso se mantiene todos los commits de la plantilla y hace que el proyecto se pueda
-actualizar desde esta. Esta opción crea un enlace remoto llamado "origin" que apunta al repositorio del proyecto, y un enlace remoto llamado "upstream" que apunta al repositorio de la plantilla. De esta forma cada proyecto puede ser actualizado desde la plantilla.
+En este caso se mantiene todos los commits de la plantilla y hace que el proyecto se pueda actualizar desde esta. Esta opción crea un enlace remoto llamado "origin" que apunta al repositorio del proyecto, y un enlace remoto llamado "upstream" que apunta al repositorio de la plantilla. De esta forma cada proyecto puede ser actualizado desde la plantilla.
 
-Para actualizar un proyecto desde la plantilla se puede utilizar wpt con la acción pull.
+Para actualizar un proyecto desde la plantilla se puede utilizar wpt con la acción sync.
 
 ```bash
-$ ./wpt pull
+$ wpt sync
 ```
 
 Es posible crear una plantilla desde otra, de la misma forma que se crea un proyecto.
@@ -137,29 +135,88 @@ El script wpt permite ejecutar el proyecto.
 * Resuelve dependencias no satisfechas desde el servicio dev
 
 ```bash
-$ ./wpt
+$ wpt
 ```
 
-El proyecto se ejecuta sobre un entrono de contenedores dockers, gestionados internamente mediante docker-compose. El script wpt carga las variables de entorno definidas en el fichero .env y ejecuta docker-compose con los ficheros yml correspondiente a cada entorno (dev y prod) y a cada servicio adicionales
+El proyecto se ejecuta sobre un entrono de contenedores dockers, gestionados internamente mediante docker-compose. El script wpt carga las variables de entorno definidas en el fichero .env y ejecuta docker-compose con los ficheros yml correspondiente a cada entorno (dev y prod) y a cada servicio adicional
 
-El script wpt es como docker-compose, pero con algunas acciones adicionales, y donde muchas de las opciones son implicitas gracias al fichero de variable de entorno. Es posible ejecutar cualquier acción de docker-compose mediante wpt, aplicandose esta sobre los servicios especificados en el proyecto.
+## Kit de herramientas
 
-Así se puede de decir que estas dos líneas son equivalentes:
-```bash
-$ ./wpt ACTION ARGS
-$ docker-compose OPTIONS_IN_.ENV ACTION ARGS
-```
+wpt se vale de varias herramientas para configurar un entorno de ejecución, gestionar automáticamente las dependencias y controlar el versionado del proyecto.
 
-Los valores del .env básicamente define las opciones que le dice a docker-compose los ficheros de configuración que debe tomar para crear los servicios que necesita la instancia concreta del proyecto.
+### Control de versiones
 
-Ejecutar el script wpt sin argumentos es equivalente a:
+Para el control de versiones wpt usa git. Es posible ejecutar cualquier acción git sobre el entorno de la plantilla.
 
 ```bash
-$ ./wpt up -d
+$ wpt git ACTION ARGS
 ```
-Para más información sobre las acciones que soporta docker-compose se puede recurrir a la ayuda de este.
 
-## Servicio proxy
+En muchos caso también es posible usar el comando git directamente, no obstante wpt lee el fichero de variables de entorno para automatizar y simplificar las acciones sobre la plantilla.
+
+Para más información sobre git, véase el [manual de referencia](https://git-scm.com/docs) de este.
+
+### Entorno de ejecución
+
+Para la virtualización, el despliegue y ejecución automática wpt usa docker-compose. Es posible ejecutar cualquier acción docker-compose sobre el entorno de la plantilla. Los siguientes comandos son equivalentes
+
+```bash
+$ wpt docker-compose ACTION ARGS
+$ wpt docker ACTION ARGS
+$ wpt dc ACTION ARGS
+```
+
+El sistema de plantillas wpt utilizará automaticamente la configuración de servicios establecida en el fichero de variables de entorno, simplificando el comando. Dentro del directorio deploy se puede encontrar la definición de los distintos servicios como ficheros docker-compose.yml, de esta forma se puede añadir cualquier servicio software adicional que fuera necesario para los proyectos creados a partir de la plantilla.
+
+Para más información sobre docker-compose, véase el [manual de referencia] (https://docs.docker.com/compose/compose-file/#compose-and-docker-compatibility-matrix) de este.
+
+### Gestión de dependencias.
+
+Para la gestión de dependencias wpt utiliza composer. Composer permite instalar y tener actualizado todo el código de wordpress, los plugins, los temas, las traducciones, etc. Además, gracias al script src/composer.php, es posible establecer configuraciones por defecto. Es posible ejecutar cualquier acción composer.
+
+```bash
+$ wpt composer ACTION ARGS
+```
+
+Composer es ejecutado en un contenedor especial llamado dev. Este contenedor tiene todas las herramientas necesarias para la construcción del proyecto desde el código. De esta forma no es necesario tener instalado ni si quiera PHP en la maquina.
+
+Para más información sobre composer véase el [manual de referencia](https://getcomposer.org/doc/) de este.
+
+
+### Repositorio de recursos
+
+El sistema de plantillas wpt usa el repositorio de código [wpackagist](https://wpackagist.org) para obtener las últimas versiones de wordpress, los plugins y demás recursos. Es posible añadir plugins o temas fácilmente mediante este comando:
+
+```bash
+$ wpt plugin|theme PACKAGE
+```
+
+Por ejemplo si se desea añadir el theme basic un template o a un determinado proyecto:
+
+```bash
+wpt theme basic
+```
+
+Por defecto wpt activa los plugins y themes que se añaden, también aplica las configuraciones por defecto según el fichero src/composer.php. Si se desea que no se activen por defecto se puede poner a false la variable de entorno AUTO_ACTIVATE_PLUGINS en el fichero .env del proyecto.
+
+Para eliminar un paquete del proyecto:
+
+```bash
+$ wpt del plugin|theme PACKAGE
+```
+
+### Herramienta por defecto
+
+Es posible configurar la herramienta por defecto que se utilizará en caso de no reconocer una acción. Para ello se utiliza la variable de entorno DEFAULT_ACTION, cuyo valor será la herramienta a utilizar por defecto en caso de no reconocer una acción. Esto permite simplificar los comandos. Por ejemplo si se establece docker como valor, cualquier acción no reconocida por wpt será introducida como acción de docker, es decir estos dos comandos serían equivalentes:
+
+```bash
+$ wpt ACTION ARGS
+$ wpt docker ACTION ARGS
+```
+
+## Servicios y contenedores especiales
+
+### Servicio proxy
 
 Todo proyecto wpt debe estar conectado con un servicio proxy desde su servicio web y por medio de una red virtual. El servcicio proxy es el que escucha en los puertos de la máquina donde se ejecuta el proyecto, y es el encargado de redireccionar las peticiones correspondientes a cada proyecto.
 
@@ -169,35 +226,65 @@ Dos o más proyectos wpt se pueden conectar al mismo proxy si se conectan a la m
 
 Al ejecutarse un proyecto wpt se comprueba si existe un proxy funcionando en la red a la que se conecta, y si no es así se ejecuta un servicio proxy en dicha red. El proxy creado escuchará en los puertos indicados por las variables de entorno WEB_PORT y WEB_SSL_PORT, cuyos valores por defecto son 80 y 443 respectivamente. Si el proxy ya está creado el proyecto se asocia a este independientemente de los puertos en los que escuche.
 
-## Servicio dev
-
-Este servicio incluye todas las herramientas de desarrollo necesarias para el proyecto. Por ejemplo es el servicio que tiene instalado composer para la gestión de dependencias.
-
-Mediante el script wpt y la acción dev podemos ejecutar comandos dentro de este servicio, siendo el directorio de trabajo el directorio del código de la aplicación
-
-Por ejemplo al ejecutar el siguiente comando se actualizarán todas las dependencias de la aplicación.
+Para gestionar el proxy wpt se puede utilizar el siguinete comando:
 
 ```bash
-$ ./wpt dev composer update
+$ wpt proxy ACTION ARGS
 ```
 
-Además wpt incluye algunas acciones como alias, lo que permiten gestionar las dependencias desde el servicio dev de forma fácil.
+El proxy es un servicio de docker-compose, por lo que las acciones admitidas son las de esta herramienta.
+
+### Contenedor dev
+
+Este contenedor docker incluye todas las herramientas de desarrollo necesarias para el proyecto. Este contendor tiene instaladas todas las dependencias del proyecto en el nivel de desarrollo: php, composer, wp-cli, openssl...
+
+Mediante el script wpt y la acción dev podemos ejecutar comandos dentro de este contenedor, siendo el directorio de trabajo el directorio del código de la aplicación
+
+Por ejemplo si se precisa de ejecutar un script test.php que se encuentra en la raíz del código de la aplicación (src).
 
 ```bash
-$ ./wpt composer [ACTION]
-$ ./wpt dev composer [ACTION]
+$ wpt dev php test.php
 ```
+
+El contenedor dev se inicia automáticamente cada vez que se ejecuta el proyecto. Cada vez que se inicia se llevan a cabo los script bash que se encuentran en el directorio "deploy/core/dev/run.d". Inicialmente este directorio contiene un script que se encarga de comprobar que las dependencias estén satisfechas. De esta forma cada vez que se ejecuta el proyecto se comprueban las dependencias, instalándose estas si fuera necesario.
+
+
+## Temas hijos
+
+Al añadir un tema a una plantilla wpt o un proyecto concreto se crea automáticamente un tema hijo de este. El tema hijo extiende al tema añadido.
+
+Todo tema hijo incluye además un código por defecto que se incluye en todos los temas añadidos. El fichero src/wp-content/default/functions.php será incluido desde el functions.php del tema hijo y el fichero src/wp-content/default/style.css será incluido desde el fichero style.css del tema hijo. De esta forma es posible añadir funciones y reglas de estilo a todos los temas que se instalen.
+
+Al eliminar un tema se mantiene el directorio del tema hijo.
+
+
+## Repositorio de trabajo
+
+Es posible configurar el repositorio git en donde se guardarán las plantillas y los proyectos. De esta forma wpt puede crear plantillas y proyectos directamente en el repositorio de una forma fácil.
+
+Para configurar el repositorio de trabajo es posible usar el siguiente comando:
+
 ```bash
-$ ./wpt require [DEPEND]
-$ ./wpt dev composer require [DEPEND]
+$ wpt config
 ```
-El servicio dev se inicia automáticamente cada vez que se ejecuta el proyecto. Cada vez que se inicia este servicio se llevan a cabo los script bash que se encuentran en el directorio "deploy/core/dev/run.d". Inicialmente este directorio contiene un script que se encarga de comprobar que las dependencias esten satisfechas. De esta forma cada vez que se ejecuta el proyecto se comprueban las dependencias, instalándose estas la primera vez.
 
+Este comando solicitará las opciones de configuración que establecen el servidor git al que se conectará, el token de acceso, el directorio de las plantillas y el directorio de los proyectos.
 
-## Añadir una nueva dependencia a la plantilla
-La gestion de dependencias es tratada con composer desde el servicio dev. Gracias al sistema de gestión de dependencias es posible añadir plugins, temas, traducciones y demás recursos fácilmente, además de facilitar su actualización
+Una vez configurado wpt de esta forma es posible crear una plantilla nueva usando el comando
 
-Los paquetes se toman de
+```bash
+$ wpt template TEMPLATE
+```
+
+Este comando descarga el código de wpt, crea un nuevo proyecto en el directorio template del repositorio de trabajo, y sube el código del template.
+
+También es posible crear un proyecto desde una plantilla mediante el comando:
+
+```bash
+$ wpt from TEMPLATE PROJECT
+```
+
+Este comando descarga el código de la plantilla indicada. crea un nuevo proyecto en el directorio de proyectos del repositorio de trabajo, y sube el código del proyecto.
 
 ## Autor
 

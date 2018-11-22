@@ -35,6 +35,12 @@ function action {
     "add")
       add $2 $3
       ;;
+    "plugin")
+      add "plugin" $2
+      ;;
+    "theme")
+      add "theme" $2
+      ;;
     "del")
       del $2 $3
       ;;
@@ -50,6 +56,13 @@ function action {
       ;;
     "template")
       template $2
+      ;;
+    "config")
+      set_git_config $2 $3
+      ;;
+    "proxy")
+      ACTION=${ACTION/$1/ }
+      proxy
       ;;
     *)
       if [[ $DEFAULT_ACTION != "" ]]; then
@@ -223,6 +236,32 @@ function del {
   $SUDO docker-compose -p $APP_NAME $CORE $SERVS run dev composer remove "wpackagist-$1/$2"
 }
 
+function set_git_config {
+  if [[ $1 != "" && $2 != "" ]]; then
+    git config --global --add wpt.$1 $2
+  else
+    echo "Server git: ";
+    read VAL
+    git config --global --add wpt.server $VAL
+    echo "Token git: ";
+    read VAL
+    git config --global --add wpt.token $VAL
+    echo "Directorio de templates: ";
+    read VAL
+    git config --global --add wpt.templatedir $VAL
+    echo "ID directorio de templates: ";
+    read VAL
+    git config --global --add wpt.templateid $VAL
+    echo "Directorio de proyectos: ";
+    read VAL
+    git config --global --add wpt.projectdir $VAL
+    echo "ID directorio de proyectos: ";
+    read VAL
+    git config --global --add wpt.projectid $VAL
+    exit
+  fi;
+}
+
 function get_git_config {
   GIT_SERVER=$(git config --global --get wpt.server)
   GIT_TOKEN=$(git config --global --get wpt.token)
@@ -276,6 +315,51 @@ function template {
       cat .env.example | sed 's/example/$1/g' > .env
       init $1
     fi
+}
+
+function proxy {
+  if [[ $ACTION == ""  || $ACTION == " " ]]; then
+    ACTION="up -d"
+  fi
+  if [[ $SUDO == "true" || $SUDO == "" ]]; then
+    SUDO="sudo "
+  else
+    SUDO=""
+  fi
+  if [[ $NETWORK == "" ]]; then
+    NETWORK="wpt"
+  fi
+  if [[ $WEB_PORT == "" ]]; then
+    WEB_PORT=80
+  fi
+  if [[ $WEB_SSL_PORT == "" ]]; then
+    WEB_SSL_PORT=443
+  fi
+  CORE="-f deploy/docker-compose.yml -f deploy/docker-compose.$ENV.yml"
+  NET=$($SUDO docker network ls | grep $NETWORK)
+  PROXY=$($SUDO docker ps | grep wpt_proxy)
+  if [[ $ACTION =~ "up" ]]; then
+    if [[ $PROXY != "" && $NET == "" ]]; then
+      echo "Ya existe un proxy wpt en otra red virtual"
+      exit
+    fi
+    if [[ $NET == "" || $PROXY == "" ]]; then
+      timeout 2  bash -c "</dev/tcp/localhost/$WEB_PORT" 2> /dev/null
+      if [[ $? == 0 ]]; then
+        echo "El puerto $WEB_PORT ya se encuentra en uso"
+        exit
+      fi
+      timeout 2  bash -c "</dev/tcp/localhost/$WEB_SSL_PORT" 2> /dev/null
+      if [[ $? == 0 ]]; then
+        echo "El puerto $WEB_SSL_PORT ya se encuentra en uso"
+        exit
+      fi
+      echo "$SUDO docker-compose -p wpt -f deploy/core/proxy/docker-service.yml $ACTION"
+      $SUDO docker-compose -p wpt -f deploy/core/proxy/docker-service.yml $ACTION
+    fi
+  else
+    $SUDO docker-compose -p wpt -f deploy/core/proxy/docker-service.yml $ACTION
+  fi
 }
 
 AUXTITLE=$4
