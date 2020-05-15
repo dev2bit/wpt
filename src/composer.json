@@ -18,8 +18,16 @@
         "php": ">=7.2",
         "johnpbloch/wordpress": "*",
         "wpackagist-plugin/akismet": "*",
-        "koodimonni-language/es_es": "^4.9",
-        "wpackagist-theme/basic": "*"
+        "wpackagist-plugin/wordpress-seo": "*",
+        "wpackagist-plugin/wp-cookie-law-info": "*",
+        "wpackagist-plugin/contact-form-7": "*",
+        "wpackagist-plugin/wp-smushit": "*",
+        "wpackagist-plugin/rocket-lazy-load": "*",
+        "wpackagist-plugin/gallery-custom-links": "*",
+        "wpackagist-plugin/addthis": "*",
+        "wpackagist-plugin/woocommerce": "*",
+        "wpackagist-plugin/post-duplicator": "*",
+        "wpackagist-theme/lovecraft": "*"
     },
     "suggest": {
         "wpackagist-plugin/woocommerce": "Woocommerce",
