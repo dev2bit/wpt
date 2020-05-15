@@ -47,7 +47,7 @@ class composer
 	  update_option( 'timezone_string', 'Europe/Madrid');
 	  update_option( 'show_on_front', 'page'); 
 	  update_option('page_on_front', 2);
-          update_option('page_for_posts', 6); 
+          update_option('page_for_posts', 7); 
           update_option( 'template', "" );
           update_option( 'stylesheet', "" );
 	  $post = get_post( 2 );
