@@ -6,7 +6,7 @@ services:
     env_file:
       - ../.env
     environment:
-      - "VIRTUAL_HOST=${WEB_HOST},www.${WEB_HOST}"
+      - "VIRTUAL_HOST=${WEB_HOST},www.${WEB_HOST},${APP_NAME}.dev2bit.com"
     volumes:
       - ./core/web/nginx.conf:/etc/nginx/nginx.conf
       - ./core/web/site.conf:/etc/nginx/conf.d/default.conf
