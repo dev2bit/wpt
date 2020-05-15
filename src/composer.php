@@ -45,14 +45,17 @@ class composer
           update_option( 'mailserver_pass', getenv("MAIL_PASSWORD") );
           update_option( 'blogdescription', getenv("DESCRIPTION") );
 	  update_option( 'timezone_string', 'Europe/Madrid');
+	  update_option( 'show_on_front', 'page'); 
+	  update_option('page_on_front', 2);
+          update_option('page_for_posts', 3); 
           update_option( 'template', "" );
           update_option( 'stylesheet', "" );
 	  $post = get_post( 2 );
 	  $post->post_title = "Inicio";
 	  wp_update_post($post);
           wp_delete_post (1);
-          PostCreator('Contacto', 'page');
           PostCreator('Blog', 'page', 'page');
+          PostCreator('Contacto', 'page');
           PostCreator('Quienes somos', 'page');
           PostCreator('Términos y condiciones de uso', 'page');
           PostCreator('Política de cookies', 'page');
