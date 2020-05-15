@@ -79,6 +79,7 @@ body.theme-lovecraft {
 
 body .post-content,
 body .post-title,
-body .lovecraft-widget-list .title { 
+body .lovecraft-widget-list .title,
+body .widget-title { 
 	font-family: 'Open Sans', serif;
 }
