@@ -16,13 +16,13 @@ if ( ! function_exists( 'PostCreator' ) ) {
 		$status    = 'publish'
 	) {
 
-		define( POST_NAME, $name );
-		define( POST_TYPE, $type );
-		define( POST_CONTENT, $content );
-		define( POST_CATEGORY, $category );
-		define( POST_TEMPLATE, '' );
-		define( POST_AUTH_ID, $author_id );
-		define( POST_STATUS, $status );
+		define( 'POST_NAME', $name );
+		define( 'POST_TYPE', $type );
+		define( 'POST_CONTENT', $content );
+		define( 'POST_CATEGORY', $category );
+		define( 'POST_TEMPLATE', '' );
+		define( 'POST_AUTH_ID', $author_id );
+		define( 'POST_STATUS', $status );
 
 		if ( $type == 'page' ) {
 			$post      = get_page_by_title( POST_NAME, 'OBJECT', $type );
