@@ -44,15 +44,20 @@ class composer
           update_option( 'mailserver_login', getenv("MAIL_USERNAME") );
           update_option( 'mailserver_pass', getenv("MAIL_PASSWORD") );
           update_option( 'blogdescription', getenv("DESCRIPTION") );
+	  update_option( 'timezone_string', 'Europe/Madrid');
           update_option( 'template', "" );
           update_option( 'stylesheet', "" );
-          PostCreator('Home', 'page');
+	  $post = get_post( 2 );
+	  $post->post_title = "Inicio";
+	  wp_update_post($post);
+          wp_delete_post (1);
           PostCreator('Contacto', 'page');
           PostCreator('Blog', 'page', 'page');
           PostCreator('Quienes somos', 'page');
           PostCreator('Términos y condiciones de uso', 'page');
           PostCreator('Política de cookies', 'page');
           PostCreator('Política de privacidad', 'page');
+	  
           $options = json_decode(file_get_contents(__DIR__."/wp-options.json"), true);
           foreach ($options as $key => $value) {
               update_option($key, $value);
