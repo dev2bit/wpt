@@ -19,7 +19,6 @@
         "johnpbloch/wordpress": "*",
         "wpackagist-plugin/akismet": "*",
         "wpackagist-plugin/wordpress-seo": "*",
-        "wpackagist-plugin/wp-cookie-law-info": "*",
         "wpackagist-plugin/contact-form-7": "*",
         "wpackagist-plugin/wp-smushit": "*",
         "wpackagist-plugin/rocket-lazy-load": "*",
