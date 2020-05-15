@@ -14,6 +14,10 @@
  * @package WordPress
  */
 
+$_SERVER['HTTPS'] = 'on';
+define('FS_METHOD', 'direct');
+define('DISABLE_WP_CRON', true);
+
 // ** Ajustes de MySQL. Solicita estos datos a tu proveedor de alojamiento web. ** //
 /** El nombre de tu base de datos de WordPress */
 define('DB_NAME', getenv("DB_DATABASE"));
