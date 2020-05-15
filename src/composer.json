@@ -27,8 +27,7 @@
         "wpackagist-plugin/addthis": "*",
         "wpackagist-plugin/woocommerce": "*",
         "wpackagist-plugin/post-duplicator": "*",
-        "wpackagist-theme/lovecraft": "*",
-        "wpackagist-plugin/wp-cookie-law-info": "*"
+        "wpackagist-theme/lovecraft": "*"
     },
     "suggest": {
         "wpackagist-plugin/woocommerce": "Woocommerce",
