@@ -178,7 +178,7 @@ function init_env {
     echo "Ya existe un proxy wpt en otra red virtual"
     exit
   fi
-  if [[ $NET == "" || $PROXY == "" ]]; then
+  if [[ $NET == "" && $PROXY == "" ]]; then
     timeout 2  bash -c "</dev/tcp/localhost/$WEB_PORT" 2> /dev/null
     if [[ $? == 0 ]]; then
       echo "El puerto $WEB_PORT ya se encuentra en uso"
