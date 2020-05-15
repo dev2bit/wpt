@@ -10,3 +10,9 @@
 
 
 /*General css*/
+
+
+.post-content { 
+	font-family: 'Helvetica', serif;
+	font-size: 1.05em;
+}
