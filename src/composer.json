@@ -17,6 +17,7 @@
     "require": {
         "php": ">=7.2",
         "johnpbloch/wordpress": "*",
+        "koodimonni-language/es_es": "*",
         "wpackagist-plugin/akismet": "*",
         "wpackagist-plugin/wordpress-seo": "*",
         "wpackagist-plugin/contact-form-7": "*",
@@ -26,7 +27,8 @@
         "wpackagist-plugin/addthis": "*",
         "wpackagist-plugin/woocommerce": "*",
         "wpackagist-plugin/post-duplicator": "*",
-        "wpackagist-theme/lovecraft": "*"
+        "wpackagist-theme/lovecraft": "*",
+        "wpackagist-theme/wp-cookie-law-info": "*"
     },
     "suggest": {
         "wpackagist-plugin/woocommerce": "Woocommerce",
