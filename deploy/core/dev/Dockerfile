@@ -34,7 +34,7 @@ RUN php -r "copy('https://getcomposer.org/installer', '/tmp/composer-setup.php')
  && composer --ansi --version --no-interaction \
  && rm -rf /tmp/* /tmp/.htaccess
 
-RUN adduser --uid 1000 user -q
+RUN adduser --uid 500 user -q
 
 RUN mkdir /run.d && chmod 755 -R /run.d
 
