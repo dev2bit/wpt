@@ -38,13 +38,13 @@ define('DB_CHARSET', 'utf8mb4');
 define('DB_COLLATE', '');
 
 
-define('WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . '/');
-define('WP_HOME',    'http://' . $_SERVER['HTTP_HOST']);
+define('WP_SITEURL', 'https://' . $_SERVER['HTTP_HOST'] . '/');
+define('WP_HOME',    'https://' . $_SERVER['HTTP_HOST']);
 define('WP_CONTENT_DIR', $_SERVER['DOCUMENT_ROOT'] . '/wp-content');
-define('WP_CONTENT_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/wp-content');
+define('WP_CONTENT_URL', 'https://' . $_SERVER['HTTP_HOST'] . '/wp-content');
 define('WP_DEFAULT_THEME', 'custom');
 define('WP_ADMIN_DIR', 'adm1n');
-define('WP_ADMIN_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/adm1n');
+define('WP_ADMIN_URL', 'https://' . $_SERVER['HTTP_HOST'] . '/adm1n');
 define('WPLANG', getenv("DEFAULT_LANG"));
 define('ADMIN_COOKIE_PATH',  '');
 
